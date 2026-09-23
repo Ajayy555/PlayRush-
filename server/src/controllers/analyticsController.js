@@ -8,7 +8,7 @@ const saveVisitor = async (req, res, next) => {
     await Visitor.findOneAndUpdate(
       { sessionId },
       { sessionId, shortCode, userAgent, language, timezone, screenWidth, screenHeight, referrer },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
     res.json({ success: true });
   } catch (err) { next(err); }
