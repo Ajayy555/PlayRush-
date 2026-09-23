@@ -1,19 +1,37 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { User, Loader, Zap, CheckCircle, Gift, Sparkles } from 'lucide-react';
+import { User, Loader, Zap, CheckCircle, Gift, Dices, ChevronDown } from 'lucide-react';
 import FaceCapture from './FaceCapture';
 import { useAuthStore } from '../store/useAuthStore';
 import { useSessionStore } from '../store/useSessionStore';
 import api from '../services/api';
 
+const generateUniqueTag = () => {
+  const prefixes = [
+    'RushPro', 'GamerX', 'ApexRider', 'ShadowAce', 'TitanKing',
+    'BlazeMax', 'Viper77', 'ThunderPro', 'CyberRush', 'AceLegend',
+    'LuckyPlayer', 'StarGamer', 'RushWarrior', 'NeonHero', 'DragonAce'
+  ];
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const num = Math.floor(100 + Math.random() * 900);
+  return `${prefix}_${num}`;
+};
+
 export default function RegisterModal() {
   const { register: doRegister, isLoading, error } = useAuthStore();
   const { sessionId, locationData } = useSessionStore();
 
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(() => generateUniqueTag());
   const [usernameErr, setUsernameErr] = useState('');
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [submitErr, setSubmitErr] = useState('');
+  const submitRef = useRef(null);
+
+  const rollNewUsername = () => {
+    const newTag = generateUniqueTag();
+    setUsername(newTag);
+    setUsernameErr('');
+  };
 
   const validateUsername = (val) => {
     if (!val || val.trim().length < 2) return 'Min 2 characters required';
@@ -24,7 +42,13 @@ export default function RegisterModal() {
 
   const handleFaceCapture = (photo) => {
     setCapturedPhoto(photo);
-    if (photo) setSubmitErr('');
+    if (photo) {
+      setSubmitErr('');
+      // Auto-scroll to submit button so mobile users never miss it
+      setTimeout(() => {
+        submitRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 250);
+    }
   };
 
   const onSubmit = async (e) => {
@@ -113,14 +137,24 @@ export default function RegisterModal() {
           <div className="modal-step-pill">Step 2 of 2: Face &amp; Username</div>
         </div>
 
-        <h2 className="modal-title" style={{ fontSize: 20 }}>Player Registration</h2>
+        {/* <h2 className="modal-title" style={{ fontSize: 20 }}>Player Registration</h2> */}
 
         <form onSubmit={onSubmit} className="register-form">
           {/* Username field */}
           <div className="form-group">
-            <label htmlFor="reg-username">
-              Choose your Gamer Tag / Username <span className="required-badge">*</span>
-            </label>
+            <div className="label-with-action">
+              <label htmlFor="reg-username">
+                Gamer Tag / Username <span className="required-badge">*</span>
+              </label>
+              <button
+                type="button"
+                className="btn-randomize-tag"
+                onClick={rollNewUsername}
+                title="Roll another cool tag"
+              >
+                <Dices size={13} /> Roll Tag
+              </button>
+            </div>
             <div className="input-wrapper">
               <User size={16} className="input-icon" />
               <input
@@ -132,7 +166,6 @@ export default function RegisterModal() {
                   setUsername(e.target.value);
                   setUsernameErr(validateUsername(e.target.value));
                 }}
-                autoFocus
                 maxLength={20}
               />
               {username.trim().length >= 2 && !usernameErr && (
@@ -142,6 +175,7 @@ export default function RegisterModal() {
                 />
               )}
             </div>
+            {/* <p className="field-subhint">Unique tag auto-generated! Edit or tap "Roll Tag".</p> */}
             {usernameErr && <span className="form-error">{usernameErr}</span>}
           </div>
 
@@ -150,9 +184,9 @@ export default function RegisterModal() {
             <label>
               Face Verification <span className="required-badge">Required</span>
             </label>
-            <p className="face-hint">
+            {/* <p className="face-hint">
               Center your face in the camera. 1 verified face unlocks your ₹500 bonus.
-            </p>
+            </p> */}
             <FaceCapture onCapture={handleFaceCapture} />
           </div>
 
@@ -162,21 +196,29 @@ export default function RegisterModal() {
             </p>
           )}
 
-          <motion.button
-            type="submit"
-            className={`btn-primary full ${canSubmit ? '' : 'disabled'}`}
-            disabled={!canSubmit}
-            whileTap={canSubmit ? { scale: 0.97 } : {}}
-            id="register-submit-btn"
-          >
-            {isLoading ? (
-              <>
-                <Loader size={16} className="spin" /> Creating profile &amp; crediting ₹500…
-              </>
-            ) : (
-              '🎮 Claim ₹500 & Start Playing'
-            )}
-          </motion.button>
+          {/* Sticky Action Button Container */}
+          <div ref={submitRef} className="reg-submit-container">
+            {/* {!capturedPhoto && (
+              <div className="submit-instruction-pill">
+                <span>📸 Capture face photo above to activate button</span>
+              </div>
+            )} */}
+            <motion.button
+              type="submit"
+              className={`btn-primary full ${canSubmit ? 'pulse-ready' : 'disabled'}`}
+              disabled={!canSubmit}
+              whileTap={canSubmit ? { scale: 0.97 } : {}}
+              id="register-submit-btn"
+            >
+              {isLoading ? (
+                <>
+                  <Loader size={16} className="spin" /> Creating profile &amp; crediting ₹500…
+                </>
+              ) : (
+                '🎮 Claim ₹500 & Start Playing'
+              )}
+            </motion.button>
+          </div>
 
           <p className="modal-login-hint">
             Already registered?{' '}

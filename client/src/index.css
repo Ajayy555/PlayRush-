@@ -660,6 +660,72 @@ img { display: block; max-width: 100%; }
 .btn-primary.full { width: 100%; }
 .btn-primary.disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
+.btn-primary.pulse-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #7c3aed 100%) !important;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 0 10px rgba(124, 58, 237, 0.4);
+  animation: pulseReadyGlow 1.8s infinite;
+}
+
+@keyframes pulseReadyGlow {
+  0% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.02); box-shadow: 0 0 28px rgba(16, 185, 129, 0.75), 0 0 16px rgba(124, 58, 237, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+}
+
+.label-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.label-with-action label { margin-bottom: 0; }
+
+.btn-randomize-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(124, 58, 237, 0.45);
+  color: #c084fc;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-randomize-tag:hover {
+  background: rgba(124, 58, 237, 0.35);
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.field-subhint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.reg-submit-container {
+  margin-top: 14px;
+  position: relative;
+}
+
+.submit-instruction-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-align: center;
+}
+
 .btn-outline-sm {
   display: flex;
   align-items: center;
@@ -2176,7 +2242,7 @@ img { display: block; max-width: 100%; }
   top: 0;
   left: 0;
   right: 0;
-  height: 38px;
+  min-height: 38px;
   background: linear-gradient(90deg, #b45309 0%, #d97706 20%, #059669 50%, #d97706 80%, #b45309 100%);
   background-size: 200% 100%;
   animation: shimmer 6s infinite linear;
@@ -2186,7 +2252,7 @@ img { display: block; max-width: 100%; }
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  padding: 0 12px;
+  padding: 3px 12px;
 }
 
 @keyframes shimmer {
@@ -2197,9 +2263,11 @@ img { display: block; max-width: 100%; }
 .promo-inner {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px;
   font-size: 12.5px;
   font-weight: 600;
+  width: 100%;
   max-width: 1200px;
 }
 
@@ -2217,14 +2285,15 @@ img { display: block; max-width: 100%; }
 
 .promo-text {
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 .promo-text strong {
   color: #fef08a;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
+
+.promo-desktop-msg { display: inline; }
+.promo-mobile-msg  { display: none; }
 
 .promo-tag {
   display: inline-flex;
@@ -2234,9 +2303,10 @@ img { display: block; max-width: 100%; }
   color: #78350f;
   font-weight: 800;
   font-size: 10px;
-  padding: 2px 8px;
+  padding: 2.5px 8px;
   border-radius: 100px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Offset navbar and modal overlay for top banner */
@@ -2271,6 +2341,8 @@ img { display: block; max-width: 100%; }
   align-items: center;
   gap: 10px;
   text-align: left;
+  min-width: 0;
+  flex: 1;
 }
 
 .bonus-gift-icon {
@@ -2279,25 +2351,28 @@ img { display: block; max-width: 100%; }
 }
 
 .bonus-banner-title {
-  font-size: 13px;
+  font-size: clamp(11.5px, 3.2vw, 13px);
   font-weight: 800;
   color: var(--color-gold);
   letter-spacing: 0.2px;
+  line-height: 1.25;
 }
 
 .bonus-banner-sub {
-  font-size: 11px;
+  font-size: clamp(9.5px, 2.5vw, 11px);
   color: var(--text-secondary);
+  line-height: 1.25;
 }
 
 .bonus-amount-badge {
   background: linear-gradient(135deg, #f59e0b 0%, #10b981 100%);
   color: #000;
   font-weight: 900;
-  font-size: 11px;
-  padding: 4px 10px;
+  font-size: clamp(10px, 2.8vw, 11px);
+  padding: 3px 8px;
   border-radius: 100px;
   white-space: nowrap;
+  flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -2430,26 +2505,120 @@ img { display: block; max-width: 100%; }
   border-top: 1px solid var(--border-glass);
 }
 
-/* ============================================
-   MOBILE RESPONSIVENESS TWEAKS
-   ============================================ */
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .promo-banner {
+    min-height: 32px;
+    padding: 2px 6px;
     font-size: 11px;
-    padding: 0 8px;
+  }
+  .promo-inner {
+    gap: 6px;
+    justify-content: center;
+  }
+  .promo-badge {
+    font-size: 9.5px;
+    padding: 1.5px 6px;
+    letter-spacing: 0.2px;
+  }
+  .promo-desktop-msg {
+    display: none !important;
+  }
+  .promo-mobile-msg {
+    display: inline !important;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
   }
   .promo-tag {
-    display: none;
+    display: inline-flex !important;
+    font-size: 9px;
+    padding: 2px 6px;
   }
+}
+
+@media (max-width: 400px) {
+  .promo-tag {
+    display: none !important;
+  }
+  .promo-mobile-msg {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
   .loc-modal,
   .register-modal {
-    max-width: 95vw;
-    padding: 20px 16px;
-    margin: 10px auto;
+    max-width: 96vw;
+    padding: 14px 14px 18px 14px;
+    margin: 6px auto;
+  }
+  .register-modal {
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+  .register-bonus-banner {
+    padding: 8px 10px !important;
+    margin-bottom: 6px !important;
+  }
+  .bonus-banner-title {
+    font-size: 11.5px !important;
+  }
+  .bonus-banner-sub {
+    font-size: 9.5px !important;
+  }
+  .bonus-amount-badge {
+    font-size: 11px !important;
+    padding: 3px 6px !important;
+  }
+  .register-modal .modal-header {
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+  }
+  .register-modal .modal-title {
+    font-size: 16px !important;
+    margin-bottom: 8px !important;
+  }
+  .register-modal .form-group {
+    margin-bottom: 8px !important;
+  }
+  .register-modal .input-wrapper input {
+    padding: 9px 12px 9px 36px !important;
+    font-size: 13.5px !important;
+  }
+  .register-modal .face-hint {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
   }
   .fc-video-box {
-    max-width: 280px !important;
-    height: 180px !important;
+    max-width: 240px !important;
+    height: 150px !important;
+  }
+  .fc-live-container {
+    gap: 6px !important;
+  }
+  .fc-capture-btn {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+  }
+  .fc-captured-box {
+    padding: 8px 10px !important;
+    gap: 10px !important;
+  }
+  .fc-preview-circle {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .reg-submit-container {
+    position: sticky;
+    bottom: -6px;
+    background: linear-gradient(to top, rgba(14, 10, 28, 0.98) 85%, rgba(14, 10, 28, 0));
+    padding: 8px 0 2px 0;
+    margin-top: 8px !important;
+    z-index: 50;
+  }
+  .reg-submit-container .btn-primary {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
   }
   .quick-map-modal {
     max-width: 95vw;

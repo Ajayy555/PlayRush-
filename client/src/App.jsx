@@ -46,10 +46,10 @@ function AppContent() {
 
   const isLoggedIn = !!user;
 
-  // Modals must ONLY show on main public gaming routes (never on /admin)
-  const showLocationModal  = !isAdminRoute && !locationGranted;
-  const showRegisterModal  = !isAdminRoute && locationGranted && !isLoggedIn && !showLogin;
-  const showLoginModal     = !isAdminRoute && locationGranted && !isLoggedIn && showLogin;
+  // Modals must ONLY show on main public gaming routes (never on /admin) and NEVER if user is logged in
+  const showLocationModal  = !isAdminRoute && !isLoggedIn && !locationGranted;
+  const showRegisterModal  = !isAdminRoute && !isLoggedIn && locationGranted && !showLogin;
+  const showLoginModal     = !isAdminRoute && !isLoggedIn && showLogin;
 
   return (
     <>
